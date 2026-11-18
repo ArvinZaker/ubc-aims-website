@@ -1,0 +1,114 @@
+[
+  {
+    "category": "Learn the basics",
+    "name": "Elements of AI",
+    "organization": "University of Helsinki & MinnaLearn",
+    "description": "Free introductory online course covering the fundamentals of artificial intelligence for non-specialists.",
+    "url": "https://www.elementsofai.com/"
+  },
+  {
+    "category": "Learn the basics",
+    "name": "3Blue1Brown: Neural Networks",
+    "organization": "3Blue1Brown",
+    "description": "Visual explanations of how neural networks, gradient descent, and backpropagation work.",
+    "url": "https://www.3blue1brown.com/?topic=neural-networks"
+  },
+  {
+    "category": "Learn the basics",
+    "name": "Machine Learning Crash Course",
+    "organization": "Google",
+    "description": "Self-study guide to machine learning concepts with interactive visualizations and exercises.",
+    "url": "https://developers.google.com/machine-learning/crash-course"
+  },
+  {
+    "category": "Learn the basics",
+    "name": "Introduction to Deep Learning",
+    "organization": "MIT",
+    "description": "Introductory MIT course on deep learning methods and applications.",
+    "url": "https://introtodeeplearning.com/"
+  },
+  {
+    "category": "AI in medicine courses",
+    "name": "AI in Healthcare Specialization",
+    "organization": "Stanford University (Coursera)",
+    "description": "Online specialization on how AI is applied in clinical settings and healthcare systems.",
+    "url": "https://www.coursera.org/specializations/ai-healthcare"
+  },
+  {
+    "category": "AI in medicine courses",
+    "name": "AI for Medicine Specialization",
+    "organization": "DeepLearning.AI (Coursera)",
+    "description": "Course series on machine learning for medical diagnosis, prognosis, and treatment.",
+    "url": "https://www.coursera.org/specializations/ai-for-medicine"
+  },
+  {
+    "category": "Tools and datasets",
+    "name": "MIT Critical Data",
+    "organization": "Massachusetts Institute of Technology",
+    "description": "Collaborative initiative advancing open health data research and clinical AI education.",
+    "url": "https://criticaldata.mit.edu/"
+  },
+  {
+    "category": "Tools and datasets",
+    "name": "UBC Data Science Institute",
+    "organization": "University of British Columbia",
+    "description": "Interdisciplinary hub at UBC supporting data science and AI research, training, and events.",
+    "url": "https://dsi.ubc.ca/"
+  },
+  {
+    "category": "Journals and news",
+    "name": "NEJM AI",
+    "organization": "NEJM Group",
+    "description": "Peer-reviewed journal focused on artificial intelligence and machine learning in clinical medicine.",
+    "url": "https://ai.nejm.org/"
+  },
+  {
+    "category": "Journals and news",
+    "name": "npj Digital Medicine",
+    "organization": "Nature Portfolio",
+    "description": "Open-access journal publishing research on digital health and medical AI.",
+    "url": "https://www.nature.com/npjdigitalmed/"
+  },
+  {
+    "category": "Journals and news",
+    "name": "The Lancet Digital Health",
+    "organization": "The Lancet",
+    "description": "Peer-reviewed journal covering digital technology and AI in healthcare and public health.",
+    "url": "https://www.thelancet.com/journals/landig/home"
+  },
+  {
+    "category": "Journals and news",
+    "name": "WHO Digital Health",
+    "organization": "World Health Organization",
+    "description": "Global guidance and policy resources on digital health and AI in healthcare.",
+    "url": "https://www.who.int/health-topics/digital-health"
+  },
+  {
+    "category": "Tools and datasets",
+    "name": "PhysioNet",
+    "organization": "MIT Laboratory for Computational Physiology",
+    "description": "Repository of physiological signals, clinical databases, and software, with access requirements that vary by dataset.",
+    "url": "https://physionet.org/"
+  },
+  {
+    "category": "Tools and datasets",
+    "name": "MONAI",
+    "organization": "Project MONAI",
+    "description": "Open-source PyTorch-based framework for deep learning in healthcare imaging.",
+    "url": "https://monai.io/"
+  },
+  {
+    "category": "Tools and datasets",
+    "name": "Hugging Face",
+    "organization": "Hugging Face",
+    "description": "Open platform hosting machine learning models, datasets, and documentation.",
+    "url": "https://huggingface.co/"
+  },
+  {
+    "category": "Tools and datasets",
+    "name": "scikit-learn",
+    "organization": "scikit-learn",
+    "description": "Open-source Python library for machine learning, data preprocessing, and model evaluation.",
+    "url": "https://scikit-learn.org/"
+  }
+]

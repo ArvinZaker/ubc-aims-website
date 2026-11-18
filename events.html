@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':true;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Past, upcoming, and planned UBC AIMS events.">
+  <meta name="theme-color" content="#0b1f3a">
+  <title>Events | UBC AIMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home">UBC AIMS</a>
+    <nav id="main-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="specialties.html">Specialties</a>
+      <a href="events.html" aria-current="page">Events</a>
+      <a href="resources.html">Resources</a>
+    </nav>
+    <div class="header-controls">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" hidden>Menu</button>
+      <button class="theme-toggle" type="button" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        Theme
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-intro">
+      <p class="eyebrow">Talks, Panels, and Workshops</p>
+      <h1>Events</h1>
+      <p>Upcoming, past, and planned UBC AIMS sessions for students.</p>
+    </div>
+
+    <div id="events-container">
+      <p id="events-status" role="status">Loading events...</p>
+      <noscript><p>Enable JavaScript to view events, or follow <a href="https://www.instagram.com/ubc.aims/">UBC AIMS on Instagram</a> for announcements.</p></noscript>
+
+      <section aria-labelledby="upcoming-heading">
+        <h2 id="upcoming-heading">Upcoming</h2>
+        <div id="events-upcoming" class="cards"></div>
+      </section>
+
+      <section aria-labelledby="past-heading">
+        <h2 id="past-heading">Past</h2>
+        <div id="events-past" class="cards"></div>
+      </section>
+
+      <section aria-labelledby="planned-heading">
+        <h2 id="planned-heading">Coming in 2027 &amp; Planned</h2>
+        <div id="events-planned" class="cards"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Instagram (@ubc.aims) &nearr;</a>
+  </footer>
+</body>
+</html>

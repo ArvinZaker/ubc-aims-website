@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':true;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Curated AI in medicine learning resources, courses, journals, tools, and datasets.">
+  <meta name="theme-color" content="#0b1f3a">
+  <title>Resources | UBC AIMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home">UBC AIMS</a>
+    <nav id="main-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="specialties.html">Specialties</a>
+      <a href="events.html">Events</a>
+      <a href="resources.html" aria-current="page">Resources</a>
+    </nav>
+    <div class="header-controls">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" hidden>Menu</button>
+      <button class="theme-toggle" type="button" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        Theme
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-intro">
+      <p class="eyebrow">Curated Library</p>
+      <h1>AI in Medicine Resources</h1>
+      <p>Courses, journals, tools, and datasets for learning about AI and its applications in medicine.</p>
+    </div>
+
+    <div class="resource-filters" role="group" aria-label="Filter resources by category" hidden>
+      <button type="button" data-filter="All" aria-pressed="true">All</button>
+      <button type="button" data-filter="Learn the basics" aria-pressed="false">Learn the basics</button>
+      <button type="button" data-filter="AI in medicine courses" aria-pressed="false">AI in medicine courses</button>
+      <button type="button" data-filter="Journals and news" aria-pressed="false">Journals and news</button>
+      <button type="button" data-filter="Tools and datasets" aria-pressed="false">Tools and datasets</button>
+    </div>
+
+    <p class="resource-count" aria-live="polite">Loading resources...</p>
+    <noscript><p>Enable JavaScript to view the resource library.</p></noscript>
+    <div id="resource-grid"></div>
+  </main>
+
+  <footer>
+    <a href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Instagram (@ubc.aims) &nearr;</a>
+  </footer>
+</body>
+</html>

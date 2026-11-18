@@ -1,0 +1,39 @@
+[
+  {
+    "id": "radiology",
+    "status": "Upcoming",
+    "title": "AI in Radiology: From Innovation to Clinical Practice",
+    "date": "November 24, 2026",
+    "time": "6:00 PM",
+    "location": "UBC Medical Student & Alumni Centre (MSAC), 2750 Heather Street",
+    "cohost": "UBC Radiology Interest Group (RIG)",
+    "description": "Short talks and a panel on AI in radiology, co-hosted with the UBC Radiology Interest Group."
+  },
+  {
+    "id": "lunch-and-learn",
+    "status": "Past",
+    "title": "AI in Medicine Lunch & Learn",
+    "date": "November 4, 2026",
+    "location": "UBC Life Sciences Centre (LSC) 1002",
+    "speaker": "Dr. Hashim Kareemi",
+    "description": "An AI education session for medical students exploring applications of AI in emergency medicine and healthcare."
+  },
+  {
+    "id": "datathon",
+    "status": "Coming in 2027",
+    "title": "AI in Health Datathon",
+    "description": "Student datathon on AI in healthcare. Date and venue to be confirmed."
+  },
+  {
+    "id": "flex-workshop",
+    "status": "Coming in 2027",
+    "title": "FLEX AI in Research Workshop",
+    "description": "Workshop on AI in research for medical students. Date to be confirmed."
+  },
+  {
+    "id": "planned-specialties",
+    "status": "Planned",
+    "title": "Cardiology & Radiation Oncology Sessions",
+    "description": "Planned sessions on AI in cardiology and radiation oncology."
+  }
+]

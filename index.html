@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':true;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="UBC Artificial Intelligence in Medicine Society (UBC AIMS) is a student-led organization exploring applications of AI in healthcare.">
+  <meta name="theme-color" content="#0b1f3a">
+  <title>Home | UBC AIMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home">UBC AIMS</a>
+    <nav id="main-nav" aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="specialties.html">Specialties</a>
+      <a href="events.html">Events</a>
+      <a href="resources.html">Resources</a>
+    </nav>
+    <div class="header-controls">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" hidden>Menu</button>
+      <button class="theme-toggle" type="button" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        Theme
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <p class="eyebrow">University of British Columbia</p>
+      <h1>UBC Artificial Intelligence in Medicine Society</h1>
+      <p class="lead">A student-led organization exploring applications of AI in healthcare.</p>
+      <div class="actions">
+        <a class="button" href="resources.html">Explore AI Resources</a>
+        <a class="button secondary" href="events.html">View Events</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="about-heading">
+      <h2 id="about-heading">About Us</h2>
+      <p>UBC AIMS brings together students interested in how artificial intelligence is studied and used across medicine. Explore our events and AI learning resources.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>AI Resources</h3>
+          <p>Browse introductory courses, medical AI specializations, journals, and open datasets.</p>
+          <a class="card-link" href="resources.html">Go to Resources &rarr;</a>
+        </article>
+        <article class="card">
+          <h3>Specialties</h3>
+          <p>See the medical specialties covered in our past, upcoming, and planned sessions.</p>
+          <a class="card-link" href="specialties.html">View Specialties &rarr;</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="involved-heading">
+      <div>
+        <p class="eyebrow">Get Involved</p>
+        <h2 id="involved-heading">Join our next event</h2>
+        <p>Follow UBC AIMS on Instagram for event announcements and come to an upcoming session.</p>
+      </div>
+      <div class="actions">
+        <a class="button" href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Follow @ubc.aims &nearr;</a>
+        <a class="button secondary" href="events.html">See Events</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Instagram (@ubc.aims) &nearr;</a>
+  </footer>
+</body>
+</html>
