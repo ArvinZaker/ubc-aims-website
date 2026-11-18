@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}})()</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="UBC AIMS events, projects, and upcoming specialty sessions.">
+  <title>Our Work | UBC AIMS</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home"><img class="brand-logo" src="assets/ubc-aims-logo.jpg" alt="" width="40" height="40">UBC AIMS</a>
+    <nav id="main-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="specialties.html">Specialties</a>
+      <a href="work.html" aria-current="page">Our Work</a>
+      <a href="resources.html">Resources</a>
+    </nav>
+    <div class="header-controls">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" hidden>Menu</button>
+      <button class="theme-toggle" type="button" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        Theme
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-intro">
+      <h1>Our Work</h1>
+      <nav class="subnav" aria-label="On this page">
+        <a href="#events">Events</a>
+        <a href="#projects">Projects</a>
+        <a href="#other">Other</a>
+      </nav>
+    </div>
+
+    <section id="events" aria-labelledby="events-heading">
+      <div class="timeline-head">
+        <h2 id="events-heading">Events</h2>
+        <a class="timeline-follow" href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Follow @ubc.aims on Instagram &nearr;</a>
+      </div>
+      <p id="events-status" role="status">Loading events...</p>
+      <noscript><p>Enable JavaScript to view the events timeline.</p></noscript>
+      <div id="events-timeline" class="timeline"></div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Projects</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>FLEX AI in Research module</h3>
+          <p>A FLEX workshop on AI in research for UBC medical students, covering agentic AI for coding and data analysis, with Dr. Min Hyung Ryu and Dr. Ricky Hu. Planned for March 2027; date to be confirmed.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="other" aria-labelledby="other-heading">
+      <h2 id="other-heading">Other</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Upcoming specialty sessions</h3>
+          <p>Planned sessions on AI in cardiology and radiation oncology.</p>
+        </article>
+        <article class="card">
+          <h3>AI study guide for medical students</h3>
+          <p>A guide to asking AI better questions and getting more useful answers for your learning.</p>
+          <div class="embed-panel">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeDS6TEmaOD/" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeDS6TEmaOD/" target="_blank" rel="noopener noreferrer">View post on Instagram</a></blockquote>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Instagram (@ubc.aims) &nearr;</a>
+  </footer>
+</body>
+</html>

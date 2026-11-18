@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':true;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}})()</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="UBC Artificial Intelligence in Medicine Society (UBC AIMS) is a student-led organization exploring applications of AI in healthcare.">
-  <meta name="theme-color" content="#0b1f3a">
   <title>Home | UBC AIMS</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
@@ -13,11 +12,11 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header>
-    <a class="brand" href="index.html" aria-label="UBC AIMS home">UBC AIMS</a>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home"><img class="brand-logo" src="assets/ubc-aims-logo.jpg" alt="" width="40" height="40">UBC AIMS</a>
     <nav id="main-nav" aria-label="Main navigation">
       <a href="index.html" aria-current="page">Home</a>
       <a href="specialties.html">Specialties</a>
-      <a href="events.html">Events</a>
+      <a href="work.html">Our Work</a>
       <a href="resources.html">Resources</a>
     </nav>
     <div class="header-controls">
@@ -37,7 +36,7 @@
       <p class="lead">A student-led organization exploring applications of AI in healthcare.</p>
       <div class="actions">
         <a class="button" href="resources.html">Explore AI Resources</a>
-        <a class="button secondary" href="events.html">View Events</a>
+        <a class="button secondary" href="work.html">View Our Work</a>
       </div>
     </section>
 
@@ -66,7 +65,7 @@
       </div>
       <div class="actions">
         <a class="button" href="https://www.instagram.com/ubc.aims/" target="_blank" rel="noopener noreferrer">Follow @ubc.aims &nearr;</a>
-        <a class="button secondary" href="events.html">See Events</a>
+        <a class="button secondary" href="work.html">See Our Work</a>
       </div>
     </section>
   </main>

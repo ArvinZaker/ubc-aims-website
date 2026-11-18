@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':true;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}})()</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Curated AI in medicine learning resources, courses, journals, tools, and datasets.">
-  <meta name="theme-color" content="#0b1f3a">
   <title>Resources | UBC AIMS</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
@@ -13,11 +12,11 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header>
-    <a class="brand" href="index.html" aria-label="UBC AIMS home">UBC AIMS</a>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home"><img class="brand-logo" src="assets/ubc-aims-logo.jpg" alt="" width="40" height="40">UBC AIMS</a>
     <nav id="main-nav" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="specialties.html">Specialties</a>
-      <a href="events.html">Events</a>
+      <a href="work.html">Our Work</a>
       <a href="resources.html" aria-current="page">Resources</a>
     </nav>
     <div class="header-controls">

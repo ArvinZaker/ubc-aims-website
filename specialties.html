@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':true;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme','dark')}})()</script>
+  <script>document.documentElement.classList.add('js');(()=>{try{const s=localStorage.getItem('theme');const d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch{document.documentElement.setAttribute('data-theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}})()</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Medical specialties covered and planned by UBC AIMS.">
-  <meta name="theme-color" content="#0b1f3a">
   <title>Specialties | UBC AIMS</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
@@ -13,11 +12,11 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header>
-    <a class="brand" href="index.html" aria-label="UBC AIMS home">UBC AIMS</a>
+    <a class="brand" href="index.html" aria-label="UBC AIMS home"><img class="brand-logo" src="assets/ubc-aims-logo.jpg" alt="" width="40" height="40">UBC AIMS</a>
     <nav id="main-nav" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="specialties.html" aria-current="page">Specialties</a>
-      <a href="events.html">Events</a>
+      <a href="work.html">Our Work</a>
       <a href="resources.html">Resources</a>
     </nav>
     <div class="header-controls">
@@ -44,25 +43,25 @@
           <span class="tag">Covered</span>
           <h3>Emergency Medicine</h3>
           <p>Featured in our November 4, 2026 AI in Medicine Lunch &amp; Learn session with Dr. Hashim Kareemi.</p>
-          <a class="card-link" href="events.html#lunch-and-learn">View event &rarr;</a>
+          <a class="card-link" href="work.html#lunch-and-learn">View event &rarr;</a>
         </article>
         <article class="card">
           <span class="tag">Upcoming</span>
           <h3>Radiology</h3>
           <p>Focus of our November 24, 2026 event with the UBC Radiology Interest Group.</p>
-          <a class="card-link" href="events.html#radiology">View event &rarr;</a>
+          <a class="card-link" href="work.html#radiology">View event &rarr;</a>
         </article>
         <article class="card">
           <span class="tag">Planned</span>
           <h3>Cardiology</h3>
           <p>Planned specialty session exploring AI in cardiology.</p>
-          <a class="card-link" href="events.html#planned-specialties">View planned events &rarr;</a>
+          <a class="card-link" href="work.html#other">View planned events &rarr;</a>
         </article>
         <article class="card">
           <span class="tag">Planned</span>
           <h3>Radiation Oncology</h3>
           <p>Planned specialty session exploring AI in radiation oncology.</p>
-          <a class="card-link" href="events.html#planned-specialties">View planned events &rarr;</a>
+          <a class="card-link" href="work.html#other">View planned events &rarr;</a>
         </article>
       </div>
     </section>
