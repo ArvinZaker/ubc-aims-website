@@ -1,10 +1,12 @@
 "use strict";
 
-initTheme();
-initNavigation();
-initScrollHeader();
-if (document.querySelector("#events-timeline")) initEvents();
-if (document.querySelector("#resource-grid")) initResources();
+if (typeof document !== "undefined") {
+  initTheme();
+  initNavigation();
+  initScrollHeader();
+  if (document.querySelector("#events-timeline")) initEvents();
+  if (document.querySelector("#resource-grid")) initResources();
+}
 
 function initTheme() {
   const toggle = document.querySelector(".theme-toggle");
@@ -152,6 +154,132 @@ function observeTimeline(items) {
   items.forEach(item => observer.observe(item));
 }
 
+function parseIsoDate(isoDate) {
+  if (typeof isoDate !== "string") return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate.trim());
+  if (!match) return null;
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatMonthYear(isoDate) {
+  const date = parseIsoDate(isoDate);
+  if (!date) return "";
+  return new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(date);
+}
+
+function formatFullDate(isoDate) {
+  const date = parseIsoDate(isoDate);
+  if (!date) return isoDate || "";
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  }).format(date);
+}
+
+function appendUniqueText(list, value) {
+  if (typeof value !== "string") return;
+  const trimmed = value.trim();
+  if (trimmed && !list.includes(trimmed)) list.push(trimmed);
+}
+
+function groupTimelineEvents(events) {
+  const groups = [];
+  for (const ev of events) {
+    if (!ev || typeof ev !== "object") continue;
+    const iso = typeof ev.isoDate === "string" ? ev.isoDate.trim() : "";
+    const normTitle = typeof ev.title === "string" ? ev.title.trim().toLowerCase() : "";
+
+    const matchingIndices = [];
+    groups.forEach((group, idx) => {
+      if ((iso && group.dates.has(iso)) || (normTitle && group.titles.has(normTitle))) {
+        matchingIndices.push(idx);
+      }
+    });
+
+    let target;
+    if (!matchingIndices.length) {
+      target = {
+        dates: new Set(),
+        titles: new Set(),
+        items: []
+      };
+      groups.push(target);
+    } else {
+      target = groups[matchingIndices[0]];
+      for (let i = matchingIndices.length - 1; i >= 1; i--) {
+        const extra = groups.splice(matchingIndices[i], 1)[0];
+        extra.dates.forEach(d => target.dates.add(d));
+        extra.titles.forEach(t => target.titles.add(t));
+        target.items.push(...extra.items);
+      }
+    }
+
+    if (iso) target.dates.add(iso);
+    if (normTitle) target.titles.add(normTitle);
+    target.items.push(ev);
+  }
+
+  return groups.map(group => {
+    const first = group.items[0];
+    const times = [];
+    const locations = [];
+    const speakers = [];
+    const cohosts = [];
+    const descriptions = [];
+    const links = [];
+    const linkUrls = new Set();
+    const posters = [];
+    const posterSrcs = new Set();
+    const instagram = [];
+    const instaUrls = new Set();
+
+    for (const ev of group.items) {
+      appendUniqueText(times, ev.time);
+      appendUniqueText(locations, ev.location);
+      appendUniqueText(speakers, ev.speaker);
+      appendUniqueText(cohosts, ev.cohost);
+      appendUniqueText(descriptions, ev.description);
+
+      if (ev.link && ev.link.url && !linkUrls.has(ev.link.url)) {
+        linkUrls.add(ev.link.url);
+        links.push({ url: ev.link.url, label: ev.link.label || "Learn more" });
+      }
+      if (ev.poster && ev.poster.src && !posterSrcs.has(ev.poster.src)) {
+        posterSrcs.add(ev.poster.src);
+        posters.push(ev.poster);
+      }
+      if (Array.isArray(ev.instagram)) {
+        for (const raw of ev.instagram) {
+          const url = validInstagramUrl(raw);
+          if (url && !instaUrls.has(url)) {
+            instaUrls.add(url);
+            instagram.push(url);
+          }
+        }
+      }
+    }
+
+    return {
+      id: first.id || "",
+      title: first.title || "",
+      isoDate: first.isoDate || "",
+      date: first.date || "",
+      time: times.join(", "),
+      location: locations.join(", "),
+      speaker: speakers.join(", "),
+      cohost: cohosts.join(", "),
+      description: descriptions.join(" "),
+      links,
+      posters,
+      instagram,
+      sourceItems: group.items.map(ev => ev.id || ev.title)
+    };
+  });
+}
+
 async function initEvents() {
   const timeline = document.querySelector("#events-timeline");
   const statusEl = document.querySelector("#events-status");
@@ -169,20 +297,31 @@ async function initEvents() {
     const now = new Date();
     const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
-    const upcoming = events
-      .filter(ev => typeof ev.isoDate === "string" && ev.isoDate >= todayIso)
-      .sort((a, b) => a.isoDate.localeCompare(b.isoDate));
+    const upcoming = groupTimelineEvents(
+      events
+        .filter(ev => typeof ev.isoDate === "string" && ev.isoDate >= todayIso)
+        .sort((a, b) => a.isoDate.localeCompare(b.isoDate))
+    );
 
-    const past = events
-      .filter(ev => typeof ev.isoDate === "string" && ev.isoDate < todayIso)
-      .sort((a, b) => b.isoDate.localeCompare(a.isoDate));
+    const past = groupTimelineEvents(
+      events
+        .filter(ev => typeof ev.isoDate === "string" && ev.isoDate < todayIso)
+        .sort((a, b) => b.isoDate.localeCompare(a.isoDate))
+    );
 
     const timelineItems = [];
 
     const buildEntry = ev => {
-      const item = createEl("li", "timeline-item reveal");
+      const hasMedia = ev.posters.length > 0 || ev.instagram.length > 0;
+      const item = createEl("li", hasMedia ? "timeline-item reveal" : "timeline-item timeline-item--no-media reveal");
       if (ev.id) item.id = ev.id;
-      item.append(createEl("h3", "", ev.title));
+
+      const textCol = createEl("div", "timeline-text");
+      const timeEl = createEl("time", "timeline-date", formatFullDate(ev.isoDate));
+      if (ev.isoDate) timeEl.dateTime = ev.isoDate;
+      textCol.append(timeEl);
+
+      textCol.append(createEl("h5", "timeline-title", ev.title));
 
       const meta = createEl("ul", "event-meta");
       if (ev.date) meta.append(createEl("li", "", `Date: ${ev.date}`));
@@ -190,38 +329,47 @@ async function initEvents() {
       if (ev.location) meta.append(createEl("li", "", `Location: ${ev.location}`));
       if (ev.speaker) meta.append(createEl("li", "", `Speaker: ${ev.speaker}`));
       if (ev.cohost) meta.append(createEl("li", "", `Co-hosted with: ${ev.cohost}`));
-      if (meta.children.length) item.append(meta);
+      if (meta.children.length) textCol.append(meta);
 
-      if (ev.description) item.append(createEl("p", "", ev.description));
+      if (ev.description) textCol.append(createEl("p", "", ev.description));
 
-      if (ev.poster && ev.poster.src) {
-        const img = createEl("img", "timeline-poster");
-        img.src = ev.poster.src;
-        img.alt = ev.poster.alt || ev.title;
-        if (ev.poster.width) img.width = ev.poster.width;
-        if (ev.poster.height) img.height = ev.poster.height;
-        img.loading = "lazy";
-        item.append(img);
-      }
-
-      if (ev.link && ev.link.url) {
-        const link = createEl("a", "button", ev.link.label || "Learn more");
-        link.href = ev.link.url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        item.append(link);
-      }
-
-      const posts = Array.isArray(ev.instagram) ? ev.instagram.map(validInstagramUrl).filter(Boolean) : [];
-      if (posts.length) {
-        const embeds = createEl("div", "timeline-embeds");
-        posts.forEach(url => {
-          const panel = createEl("div", "embed-panel");
-          panel.append(createInstagramQuote(url));
-          embeds.append(panel);
-          embedPanels.push({ panel, url });
+      if (ev.links.length) {
+        const linksWrap = createEl("div", "timeline-links");
+        ev.links.forEach(itemLink => {
+          const link = createEl("a", "button", itemLink.label);
+          link.href = itemLink.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          linksWrap.append(link);
         });
-        item.append(embeds);
+        textCol.append(linksWrap);
+      }
+
+      item.append(textCol);
+
+      if (hasMedia) {
+        const mediaCol = createEl("div", "timeline-media");
+        ev.posters.forEach(poster => {
+          const img = createEl("img", "timeline-poster");
+          img.src = poster.src;
+          img.alt = poster.alt || ev.title;
+          if (poster.width) img.width = poster.width;
+          if (poster.height) img.height = poster.height;
+          img.loading = "lazy";
+          mediaCol.append(img);
+        });
+
+        if (ev.instagram.length) {
+          const embeds = createEl("div", "timeline-embeds");
+          ev.instagram.forEach(url => {
+            const panel = createEl("div", "embed-panel");
+            panel.append(createInstagramQuote(url));
+            embeds.append(panel);
+            embedPanels.push({ panel, url });
+          });
+          mediaCol.append(embeds);
+        }
+        item.append(mediaCol);
       }
 
       timelineItems.push(item);
@@ -231,9 +379,27 @@ async function initEvents() {
     const appendGroup = (heading, groupEvents) => {
       if (!groupEvents.length) return;
       timeline.append(createEl("h3", "timeline-divider", heading));
-      const list = createEl("ol", "timeline-list");
-      groupEvents.forEach(ev => list.append(buildEntry(ev)));
-      timeline.append(list);
+
+      const monthGroups = [];
+      const monthMap = new Map();
+      groupEvents.forEach(ev => {
+        const label = formatMonthYear(ev.isoDate) || "Other";
+        if (!monthMap.has(label)) {
+          const bucket = { label, events: [] };
+          monthMap.set(label, bucket);
+          monthGroups.push(bucket);
+        }
+        monthMap.get(label).events.push(ev);
+      });
+
+      monthGroups.forEach(group => {
+        const section = createEl("div", "timeline-month-group");
+        section.append(createEl("h4", "timeline-month-header", group.label));
+        const list = createEl("ol", "timeline-list");
+        group.events.forEach(ev => list.append(buildEntry(ev)));
+        section.append(list);
+        timeline.append(section);
+      });
     };
 
     appendGroup("Upcoming", upcoming);
@@ -313,4 +479,8 @@ async function initResources() {
   } catch {
     countEl.textContent = "Resources could not load. Please reload the page to try again.";
   }
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { groupTimelineEvents, formatMonthYear, formatFullDate };
 }
