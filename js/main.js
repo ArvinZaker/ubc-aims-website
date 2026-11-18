@@ -359,7 +359,7 @@ async function initEvents() {
     const upcoming = groupTimelineEvents(
       events
         .filter(ev => typeof ev.isoDate === "string" && ev.isoDate >= todayIso)
-        .sort((a, b) => a.isoDate.localeCompare(b.isoDate))
+        .sort((a, b) => b.isoDate.localeCompare(a.isoDate))
     );
 
     const past = groupTimelineEvents(
