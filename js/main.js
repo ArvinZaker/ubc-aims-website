@@ -280,9 +280,68 @@ function groupTimelineEvents(events) {
   });
 }
 
+function setupTimelineScrubber(scrubber, entries) {
+  if (!scrubber || !entries.length) return;
+  const linksById = new Map();
+  let lastYear = "";
+
+  entries.forEach(entry => {
+    const date = parseIsoDate(entry.isoDate);
+    const year = date ? String(date.getFullYear()) : "";
+    const monthLabel = date
+      ? new Intl.DateTimeFormat("en-US", { month: "short" }).format(date)
+      : entry.label;
+
+    if (year && year !== lastYear) {
+      scrubber.append(createEl("span", "scrubber-year", year));
+      lastYear = year;
+    }
+
+    const link = createEl("a", "scrubber-link", monthLabel);
+    link.href = `#${entry.id}`;
+    link.setAttribute("aria-label", entry.label);
+    scrubber.append(link);
+    linksById.set(entry.id, link);
+  });
+
+  scrubber.hidden = false;
+
+  const setActive = activeId => {
+    linksById.forEach((link, id) => {
+      const active = id === activeId;
+      link.classList.toggle("is-active", active);
+      if (active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  setActive(entries[0].id);
+
+  scrubber.addEventListener("click", event => {
+    const link = event.target.closest("a.scrubber-link");
+    if (!link) return;
+    const targetId = link.getAttribute("href").slice(1);
+    if (linksById.has(targetId)) setActive(targetId);
+  });
+
+  if ("IntersectionObserver" in window) {
+    const sectionToId = new Map(entries.map(entry => [entry.section, entry.id]));
+    const observer = new IntersectionObserver(obsEntries => {
+      for (const obsEntry of obsEntries) {
+        if (!obsEntry.isIntersecting) continue;
+        const id = sectionToId.get(obsEntry.target);
+        if (id) setActive(id);
+      }
+    }, { rootMargin: "-20% 0px -65% 0px", threshold: 0 });
+
+    entries.forEach(entry => observer.observe(entry.section));
+  }
+}
+
 async function initEvents() {
   const timeline = document.querySelector("#events-timeline");
   const statusEl = document.querySelector("#events-status");
+  const scrubber = document.querySelector("#timeline-scrubber");
   if (!timeline) return;
 
   const embedPanels = [...document.querySelectorAll(".embed-panel blockquote.instagram-media")]
@@ -310,10 +369,17 @@ async function initEvents() {
     );
 
     const timelineItems = [];
+    const scrubberEntries = [];
 
     const buildEntry = ev => {
-      const hasMedia = ev.posters.length > 0 || ev.instagram.length > 0;
-      const item = createEl("li", hasMedia ? "timeline-item reveal" : "timeline-item timeline-item--no-media reveal");
+      const mediaCount = ev.posters.length + ev.instagram.length;
+      const hasMedia = mediaCount > 0;
+      const itemClass = !hasMedia
+        ? "timeline-item timeline-item--no-media reveal"
+        : mediaCount > 1
+          ? "timeline-item timeline-item--multi-media reveal"
+          : "timeline-item reveal";
+      const item = createEl("li", itemClass);
       if (ev.id) item.id = ev.id;
 
       const textCol = createEl("div", "timeline-text");
@@ -393,12 +459,22 @@ async function initEvents() {
       });
 
       monthGroups.forEach(group => {
+        const slug = `${heading}-${group.label}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const anchorId = `month-${slug}`;
         const section = createEl("div", "timeline-month-group");
-        section.append(createEl("h4", "timeline-month-header", group.label));
+        const header = createEl("h4", "timeline-month-header", group.label);
+        header.id = anchorId;
+        section.append(header);
         const list = createEl("ol", "timeline-list");
         group.events.forEach(ev => list.append(buildEntry(ev)));
         section.append(list);
         timeline.append(section);
+        scrubberEntries.push({
+          id: anchorId,
+          isoDate: group.events[0] ? group.events[0].isoDate : "",
+          label: group.label,
+          section
+        });
       });
     };
 
@@ -406,6 +482,7 @@ async function initEvents() {
     appendGroup("Past", past);
 
     if (statusEl) statusEl.hidden = true;
+    setupTimelineScrubber(scrubber, scrubberEntries);
     observeTimeline(timelineItems);
 
     if (window.location.hash) {

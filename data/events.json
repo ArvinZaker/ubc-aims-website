@@ -83,5 +83,12 @@
     "instagram": [
       "https://www.instagram.com/p/DYY9CADxRX4/"
     ]
+  },
+  {
+    "id": "meddata-datathon-march-2026",
+    "title": "MedData Datathon 2026",
+    "isoDate": "2026-03-07",
+    "date": "March 2026",
+    "description": "Student health datathon held in March 2026."
   }
 ]

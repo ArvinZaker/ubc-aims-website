@@ -7,8 +7,8 @@
   <meta name="description" content="UBC AIMS events, projects, and upcoming specialty sessions.">
   <title>Our Work | UBC AIMS</title>
   <link rel="icon" href="assets/ubc-aims-logo.jpg">
-  <link rel="stylesheet" href="css/style.css?v=2">
-  <script src="js/main.js?v=2" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <script src="js/main.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -47,34 +47,47 @@
       </div>
       <p id="events-status" role="status">Loading events...</p>
       <noscript><p>Enable JavaScript to view the events timeline.</p></noscript>
-      <div id="events-timeline" class="timeline"></div>
+      <div class="timeline-layout">
+        <div id="events-timeline" class="timeline"></div>
+        <nav id="timeline-scrubber" class="timeline-scrubber" aria-label="Timeline months" hidden></nav>
+      </div>
     </section>
 
     <section id="projects" aria-labelledby="projects-heading">
       <h2 id="projects-heading">Projects</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>FLEX AI in Research module</h3>
-          <p>A FLEX workshop on AI in research for UBC medical students, covering agentic AI for coding and data analysis, with Dr. Min Hyung Ryu and Dr. Ricky Hu. Planned for March 2027; date to be confirmed.</p>
-        </article>
-      </div>
+      <ul class="timeline-list">
+        <li class="timeline-item timeline-item--no-media">
+          <div class="timeline-text">
+            <h3 class="timeline-title">FLEX AI in Research module</h3>
+            <p>A FLEX workshop on AI in research for UBC medical students, covering agentic AI for coding and data analysis, with Dr. Min Hyung Ryu and Dr. Ricky Hu. Planned for March 2027; date to be confirmed.</p>
+          </div>
+        </li>
+      </ul>
     </section>
 
     <section id="other" aria-labelledby="other-heading">
       <h2 id="other-heading">Other</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>Upcoming specialty sessions</h3>
-          <p>Planned sessions on AI in cardiology and radiation oncology.</p>
-        </article>
-        <article class="card">
-          <h3>AI study guide for medical students</h3>
-          <p>A guide to asking AI better questions and getting more useful answers for your learning.</p>
-          <div class="embed-panel">
-            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeDS6TEmaOD/" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeDS6TEmaOD/" target="_blank" rel="noopener noreferrer">View post on Instagram</a></blockquote>
+      <ul class="timeline-list">
+        <li class="timeline-item timeline-item--no-media">
+          <div class="timeline-text">
+            <h3 class="timeline-title">Upcoming specialty sessions</h3>
+            <p>Planned sessions on AI in cardiology and radiation oncology.</p>
           </div>
-        </article>
-      </div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-text">
+            <h3 class="timeline-title">AI study guide for medical students</h3>
+            <p>A guide to asking AI better questions and getting more useful answers for your learning.</p>
+          </div>
+          <div class="timeline-media">
+            <div class="timeline-embeds">
+              <div class="embed-panel">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeDS6TEmaOD/" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeDS6TEmaOD/" target="_blank" rel="noopener noreferrer">View post on Instagram</a></blockquote>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
     </section>
   </main>
 
