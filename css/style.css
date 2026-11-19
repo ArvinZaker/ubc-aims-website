@@ -466,7 +466,7 @@ section { margin: var(--size-3p5rem) 0; }
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--size-1rem);
+  gap: var(--size-p75rem);
   padding-left: var(--size-1p75rem);
   min-width: 0;
 }
@@ -553,7 +553,7 @@ section { margin: var(--size-3p5rem) 0; }
 .timeline-list {
   display: flex;
   flex-direction: column;
-  gap: var(--size-p9rem);
+  gap: var(--size-p75rem);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -561,11 +561,11 @@ section { margin: var(--size-3p5rem) 0; }
 .timeline-item {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(var(--size-326px), var(--size-360px));
+  grid-template-columns: minmax(0, 1fr) var(--size-326px);
   align-items: start;
-  gap: var(--size-1p15rem);
+  gap: var(--size-1rem);
   min-width: 0;
-  padding: var(--size-1p15rem) var(--size-1p25rem);
+  padding: var(--size-p9rem) var(--size-1p15rem);
   border: var(--size-1px) solid var(--line);
   border-radius: var(--size-12px);
   background: var(--surface);
@@ -599,7 +599,7 @@ section { margin: var(--size-3p5rem) 0; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--size-p55rem);
+  gap: var(--size-p4rem);
   min-width: 0;
 }
 .timeline-date {
@@ -633,8 +633,8 @@ section { margin: var(--size-3p5rem) 0; }
 .timeline-poster {
   display: block;
   width: 100%;
-  max-width: var(--size-360px);
-  max-height: var(--size-300px);
+  max-width: var(--size-326px);
+  max-height: var(--size-240px);
   height: auto;
   object-fit: contain;
   border-radius: var(--size-8px);
@@ -654,7 +654,7 @@ section { margin: var(--size-3p5rem) 0; }
   flex: 1 1 var(--size-326px);
   width: 100%;
   min-width: var(--size-326px);
-  max-width: var(--size-360px);
+  max-width: var(--size-326px);
 }
 .embed-panel .instagram-media {
   display: block;
