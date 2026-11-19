@@ -243,9 +243,14 @@ function groupTimelineEvents(events) {
       appendUniqueText(cohosts, ev.cohost);
       appendUniqueText(descriptions, ev.description);
 
-      if (ev.link && ev.link.url && !linkUrls.has(ev.link.url)) {
-        linkUrls.add(ev.link.url);
-        links.push({ url: ev.link.url, label: ev.link.label || "Learn more" });
+      const eventLinks = [];
+      if (ev.link && typeof ev.link === "object") eventLinks.push(ev.link);
+      if (Array.isArray(ev.links)) eventLinks.push(...ev.links);
+      for (const itemLink of eventLinks) {
+        if (itemLink && itemLink.url && !linkUrls.has(itemLink.url)) {
+          linkUrls.add(itemLink.url);
+          links.push({ url: itemLink.url, label: itemLink.label || "Learn more" });
+        }
       }
       if (ev.poster && ev.poster.src && !posterSrcs.has(ev.poster.src)) {
         posterSrcs.add(ev.poster.src);
@@ -376,9 +381,7 @@ async function initEvents() {
       const hasMedia = mediaCount > 0;
       const itemClass = !hasMedia
         ? "timeline-item timeline-item--no-media reveal"
-        : mediaCount > 1
-          ? "timeline-item timeline-item--multi-media reveal"
-          : "timeline-item reveal";
+        : "timeline-item reveal";
       const item = createEl("li", itemClass);
       if (ev.id) item.id = ev.id;
 
@@ -415,6 +418,8 @@ async function initEvents() {
 
       if (hasMedia) {
         const mediaCol = createEl("div", "timeline-media");
+        const mediaNodes = [];
+
         ev.posters.forEach(poster => {
           const img = createEl("img", "timeline-poster");
           img.src = poster.src;
@@ -422,18 +427,66 @@ async function initEvents() {
           if (poster.width) img.width = poster.width;
           if (poster.height) img.height = poster.height;
           img.loading = "lazy";
-          mediaCol.append(img);
+          mediaNodes.push(img);
         });
 
-        if (ev.instagram.length) {
-          const embeds = createEl("div", "timeline-embeds");
-          ev.instagram.forEach(url => {
-            const panel = createEl("div", "embed-panel");
-            panel.append(createInstagramQuote(url));
-            embeds.append(panel);
-            embedPanels.push({ panel, url });
+        ev.instagram.forEach(url => {
+          const panel = createEl("div", "embed-panel");
+          panel.append(createInstagramQuote(url));
+          mediaNodes.push(panel);
+          embedPanels.push({ panel, url });
+        });
+
+        if (mediaNodes.length === 1) {
+          mediaCol.append(mediaNodes[0]);
+        } else {
+          const stack = createEl("div", "media-stack");
+          const stage = createEl("div", "media-stack-stage");
+          const slides = mediaNodes.map((node, idx) => {
+            const slide = createEl("div", idx === 0 ? "media-stack-slide is-active" : "media-stack-slide");
+            if (idx !== 0) {
+              slide.setAttribute("aria-hidden", "true");
+              slide.inert = true;
+            }
+            slide.append(node);
+            stage.append(slide);
+            return slide;
           });
-          mediaCol.append(embeds);
+
+          const prevBtn = createEl("button", "media-stack-btn media-stack-prev", "<");
+          prevBtn.type = "button";
+          prevBtn.setAttribute("aria-label", "Previous media item");
+
+          const nextBtn = createEl("button", "media-stack-btn media-stack-next", ">");
+          nextBtn.type = "button";
+          nextBtn.setAttribute("aria-label", "Next media item");
+
+          const counter = createEl("div", "media-stack-counter", `1 / ${slides.length}`);
+          counter.setAttribute("aria-live", "polite");
+
+          let activeIndex = 0;
+          const showSlide = nextIndex => {
+            activeIndex = (nextIndex + slides.length) % slides.length;
+            slides.forEach((slide, idx) => {
+              const active = idx === activeIndex;
+              slide.classList.toggle("is-active", active);
+              if (active) {
+                slide.removeAttribute("aria-hidden");
+                slide.inert = false;
+              } else {
+                slide.setAttribute("aria-hidden", "true");
+                slide.inert = true;
+              }
+            });
+            counter.textContent = `${activeIndex + 1} / ${slides.length}`;
+          };
+
+          prevBtn.addEventListener("click", () => showSlide(activeIndex - 1));
+          nextBtn.addEventListener("click", () => showSlide(activeIndex + 1));
+
+          stage.append(prevBtn, nextBtn);
+          stack.append(stage, counter);
+          mediaCol.append(stack);
         }
         item.append(mediaCol);
       }
