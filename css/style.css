@@ -653,6 +653,41 @@ section { margin: var(--size-3p5rem) 0; }
   color: var(--ink);
 }
 
+.website-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-p6rem);
+  width: 100%;
+  min-height: var(--size-420px);
+  padding: var(--size-1p75rem) var(--size-1p5rem);
+  border: var(--size-1px) solid var(--line);
+  border-radius: var(--size-8px);
+  background: linear-gradient(var(--size-135deg), var(--surface-pill) 0%, var(--surface) 100%);
+  text-align: center;
+  color: var(--text);
+}
+.website-card-label {
+  font-size: var(--size-p74rem);
+  font-weight: 700;
+  letter-spacing: var(--size-p06em);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.website-card-title {
+  font-size: var(--size-1p15rem);
+  font-weight: 700;
+  color: var(--heading);
+}
+.website-card-date {
+  font-size: var(--size-p88rem);
+  color: var(--ink);
+}
+.website-card .button {
+  margin-top: var(--size-p4rem);
+}
+
 .media-stack {
   display: flex;
   flex-direction: column;

@@ -65,6 +65,15 @@ function createEl(tag, className, text) {
   return el;
 }
 
+function validHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 function validInstagramUrl(value) {
   try {
     const url = new URL(value);
@@ -88,6 +97,20 @@ function createInstagramFallback(url, date) {
   box.append(createInstagramLink(url));
   if (date) box.append(createEl("span", "embed-fallback-date", date));
   return box;
+}
+
+function createWebsiteCard(url, ev) {
+  const card = createEl("div", "website-card");
+  card.append(createEl("span", "website-card-label", "Event website"));
+  card.append(createEl("strong", "website-card-title", ev.title || "Event website"));
+  const dateText = ev.date || formatFullDate(ev.isoDate);
+  if (dateText) card.append(createEl("span", "website-card-date", dateText));
+  const btn = createEl("a", "button", "Visit the event website");
+  btn.href = url;
+  btn.target = "_blank";
+  btn.rel = "noopener noreferrer";
+  card.append(btn);
+  return card;
 }
 
 function createInstagramQuote(url, active = true) {
@@ -268,6 +291,8 @@ function groupTimelineEvents(events) {
     const linkUrls = new Set();
     const posters = [];
     const posterSrcs = new Set();
+    const websites = [];
+    const websiteUrls = new Set();
     const instagram = [];
     const instaUrls = new Set();
 
@@ -285,6 +310,13 @@ function groupTimelineEvents(events) {
         if (itemLink && itemLink.url && !linkUrls.has(itemLink.url)) {
           linkUrls.add(itemLink.url);
           links.push({ url: itemLink.url, label: itemLink.label || "Learn more" });
+        }
+        if (itemLink && /^event website$/i.test(String(itemLink.label || "").trim())) {
+          const url = validHttpUrl(itemLink.url);
+          if (url && !websiteUrls.has(url)) {
+            websiteUrls.add(url);
+            websites.push(url);
+          }
         }
       }
       if (ev.poster && ev.poster.src && !posterSrcs.has(ev.poster.src)) {
@@ -314,6 +346,7 @@ function groupTimelineEvents(events) {
       description: descriptions.join(" "),
       links,
       posters,
+      websites,
       instagram,
       sourceItems: group.items.map(ev => ev.id || ev.title)
     };
@@ -412,7 +445,7 @@ async function initEvents() {
     const scrubberEntries = [];
 
     const buildEntry = ev => {
-      const mediaCount = ev.posters.length + ev.instagram.length;
+      const mediaCount = ev.websites.length + ev.posters.length + ev.instagram.length;
       const hasMedia = mediaCount > 0;
       const itemClass = !hasMedia
         ? "timeline-item timeline-item--no-media reveal"
@@ -456,6 +489,10 @@ async function initEvents() {
         const mediaNodes = [];
         const panelPosts = new Map();
         const postDate = ev.date || formatFullDate(ev.isoDate);
+
+        ev.websites.forEach(url => {
+          mediaNodes.push(createWebsiteCard(url, ev));
+        });
 
         ev.posters.forEach(poster => {
           const img = createEl("img", "timeline-poster");
