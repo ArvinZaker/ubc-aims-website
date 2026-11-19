@@ -75,49 +75,32 @@ function validInstagramUrl(value) {
   }
 }
 
-function createInstagramFallback(url) {
-  const link = createEl("a", "", "View post on Instagram");
+function createInstagramLink(url) {
+  const link = createEl("a", "", "View on Instagram");
   link.href = url;
   link.target = "_blank";
   link.rel = "noopener noreferrer";
   return link;
 }
 
-function createInstagramQuote(url) {
+function createInstagramFallback(url, date) {
+  const box = createEl("div", "embed-fallback");
+  box.append(createInstagramLink(url));
+  if (date) box.append(createEl("span", "embed-fallback-date", date));
+  return box;
+}
+
+function createInstagramQuote(url, active = true) {
   const quote = document.createElement("blockquote");
-  quote.className = "instagram-media";
+  if (active) quote.className = "instagram-media";
   quote.dataset.instgrmPermalink = url;
   quote.dataset.instgrmVersion = "14";
-  quote.append(createInstagramFallback(url));
+  quote.append(createInstagramLink(url));
   return quote;
 }
 
 let instagramScript;
-function loadInstagramEmbeds(panels) {
-  if (!panels.length) return;
-  const fallback = ({ panel, url }) => panel.replaceChildren(createInstagramFallback(url));
-  // Instagram adds inline widths; keep sizing in the site's CSS.
-  if ("MutationObserver" in window) {
-    panels.forEach(({ panel }) => {
-      const normalize = () => {
-        panel.querySelectorAll(".instagram-media").forEach(embed => {
-          ["width", "min-width", "max-width", "margin"].forEach(name => {
-            if (embed.style.getPropertyValue(name)) embed.style.removeProperty(name);
-          });
-        });
-      };
-      normalize();
-      new MutationObserver(normalize).observe(panel, {
-        childList: true, subtree: true, attributes: true, attributeFilter: ["style"]
-      });
-    });
-  }
-  const timeout = setTimeout(() => {
-    panels.forEach(post => {
-      const frame = post.panel.querySelector("iframe.instagram-media");
-      if (!frame || frame.offsetHeight < 50) fallback(post);
-    });
-  }, 30000);
+function loadInstagramScript() {
   if (!instagramScript) {
     instagramScript = new Promise((resolve, reject) => {
       if (window.instgrm) { resolve(); return; }
@@ -132,10 +115,62 @@ function loadInstagramEmbeds(panels) {
       script.addEventListener("error", reject, { once: true });
     });
   }
-  instagramScript.then(() => {
-    try { window.instgrm.Embeds.process(); }
-    catch { clearTimeout(timeout); panels.forEach(fallback); }
-  }, () => { clearTimeout(timeout); panels.forEach(fallback); });
+  return instagramScript;
+}
+
+function observeInstagramPanel(panel) {
+  // Instagram adds inline widths; keep sizing in the site's CSS.
+  if (!("MutationObserver" in window)) return null;
+  const normalize = () => {
+    panel.querySelectorAll(".instagram-media").forEach(embed => {
+      ["width", "min-width", "max-width", "margin"].forEach(name => {
+        if (embed.style.getPropertyValue(name)) embed.style.removeProperty(name);
+      });
+    });
+  };
+  normalize();
+  const observer = new MutationObserver(normalize);
+  observer.observe(panel, {
+    childList: true, subtree: true, attributes: true, attributeFilter: ["style"]
+  });
+  return observer;
+}
+
+function processInstagramPanel(post) {
+  if (!post || post.started) return;
+  post.started = true;
+  const quote = post.panel.querySelector("blockquote");
+  if (quote && !quote.classList.contains("instagram-media")) {
+    quote.classList.add("instagram-media");
+  }
+  const observer = observeInstagramPanel(post.panel);
+  const fallback = () => {
+    if (post.done) return;
+    post.done = true;
+    if (observer) observer.disconnect();
+    post.panel.replaceChildren(createInstagramFallback(post.url, post.date));
+  };
+  const timeout = setTimeout(() => {
+    const frame = post.panel.querySelector("iframe.instagram-media");
+    if (!frame || frame.offsetHeight < 50) fallback();
+    else post.done = true;
+  }, 8000);
+
+  loadInstagramScript().then(() => {
+    try {
+      window.instgrm.Embeds.process(post.panel);
+    } catch {
+      clearTimeout(timeout);
+      fallback();
+    }
+  }, () => {
+    clearTimeout(timeout);
+    fallback();
+  });
+}
+
+function loadInstagramEmbeds(panels) {
+  panels.forEach(processInstagramPanel);
 }
 
 function observeTimeline(items) {
@@ -350,7 +385,7 @@ async function initEvents() {
   if (!timeline) return;
 
   const embedPanels = [...document.querySelectorAll(".embed-panel blockquote.instagram-media")]
-    .map(quote => ({ panel: quote.parentElement, url: validInstagramUrl(quote.dataset.instgrmPermalink) }))
+    .map(quote => ({ panel: quote.parentElement, url: validInstagramUrl(quote.dataset.instgrmPermalink), date: "" }))
     .filter(post => post.url);
   try {
     const response = await fetch("data/events.json");
@@ -419,6 +454,8 @@ async function initEvents() {
       if (hasMedia) {
         const mediaCol = createEl("div", "timeline-media");
         const mediaNodes = [];
+        const panelPosts = new Map();
+        const postDate = ev.date || formatFullDate(ev.isoDate);
 
         ev.posters.forEach(poster => {
           const img = createEl("img", "timeline-poster");
@@ -432,21 +469,29 @@ async function initEvents() {
 
         ev.instagram.forEach(url => {
           const panel = createEl("div", "embed-panel");
-          panel.append(createInstagramQuote(url));
+          const isFirst = mediaNodes.length === 0;
+          panel.append(createInstagramQuote(url, isFirst));
           mediaNodes.push(panel);
-          embedPanels.push({ panel, url });
+          panelPosts.set(panel, { panel, url, date: postDate });
         });
 
         if (mediaNodes.length === 1) {
+          const singlePost = panelPosts.get(mediaNodes[0]);
+          if (singlePost) embedPanels.push(singlePost);
           mediaCol.append(mediaNodes[0]);
         } else {
           const stack = createEl("div", "media-stack");
           const stage = createEl("div", "media-stack-stage");
+          const slideEmbeds = new Map();
           const slides = mediaNodes.map((node, idx) => {
             const slide = createEl("div", idx === 0 ? "media-stack-slide is-active" : "media-stack-slide");
-            if (idx !== 0) {
+            const post = panelPosts.get(node);
+            if (idx === 0) {
+              if (post) embedPanels.push(post);
+            } else {
               slide.setAttribute("aria-hidden", "true");
               slide.inert = true;
+              if (post) slideEmbeds.set(slide, post);
             }
             slide.append(node);
             stage.append(slide);
@@ -479,6 +524,13 @@ async function initEvents() {
               }
             });
             counter.textContent = `${activeIndex + 1} / ${slides.length}`;
+            const activeSlide = slides[activeIndex];
+            const post = slideEmbeds.get(activeSlide);
+            if (post && !post.started) {
+              requestAnimationFrame(() => {
+                if (activeSlide.classList.contains("is-active")) processInstagramPanel(post);
+              });
+            }
           };
 
           prevBtn.addEventListener("click", () => showSlide(activeIndex - 1));

@@ -635,6 +635,23 @@ section { margin: var(--size-3p5rem) 0; }
   max-width: 100%;
   margin: 0;
 }
+.embed-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-p4rem);
+  min-height: var(--size-240px);
+  padding: var(--size-1p5rem) var(--size-1rem);
+  border: var(--size-1px) solid var(--line);
+  border-radius: var(--size-8px);
+  background: var(--bg);
+  text-align: center;
+}
+.embed-fallback-date {
+  font-size: var(--size-p84rem);
+  color: var(--ink);
+}
 
 .media-stack {
   display: flex;
