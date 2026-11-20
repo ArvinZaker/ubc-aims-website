@@ -100,16 +100,31 @@ function createInstagramFallback(url, date) {
 }
 
 function createWebsiteCard(url, ev) {
-  const card = createEl("div", "website-card");
-  card.append(createEl("span", "website-card-label", "Event website"));
-  card.append(createEl("strong", "website-card-title", ev.title || "Event website"));
+  const card = createEl("a", "website-card");
+  card.href = url;
+  card.target = "_blank";
+  card.rel = "noopener noreferrer";
+
+  let host = url;
+  try {
+    host = new URL(url).host || url;
+  } catch {}
+
+  const bar = createEl("div", "website-card-bar");
+  const dots = createEl("span", "website-card-dots");
+  dots.setAttribute("aria-hidden", "true");
+  for (let i = 0; i < 3; i += 1) dots.append(createEl("span", "website-card-dot"));
+  bar.append(dots, createEl("span", "website-card-host", host));
+
+  const body = createEl("div", "website-card-body");
+  body.append(createEl("strong", "website-card-title", ev.title || "Event website"));
   const dateText = ev.date || formatFullDate(ev.isoDate);
-  if (dateText) card.append(createEl("span", "website-card-date", dateText));
-  const btn = createEl("a", "button", "Visit the event website");
-  btn.href = url;
-  btn.target = "_blank";
-  btn.rel = "noopener noreferrer";
-  card.append(btn);
+  if (dateText) body.append(createEl("span", "website-card-date", dateText));
+
+  const footer = createEl("div", "website-card-footer");
+  footer.append(createEl("span", "button website-card-btn", "Visit the event website"));
+
+  card.append(bar, body, footer);
   return card;
 }
 
